@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String      @id @default(uuid())
+  name      String
+  email     String
+  password  String
+  createdAt DateTime    @default(now())
+  events    Event[]
+  tickets   Ticket[]
+}
+
+model Event {
+  id                String    @id @default(uuid())
+  title             String    
+  description       String
+  indicativeRating  String
+  category          String
+  banner            String
+  author            User      @relation(fields: [authorId], references: [id])
+  authorId          String
+  createdAt         DateTime  @default(now())
+  sessions          Session[]
+  tickets           Ticket[]
+}
+
+model Session {
+  id            String    @id @default(uuid())
+  scheduledAt   DateTime
+  event         Event     @relation(fields: [eventId], references: [id])
+  eventId       String
+  sectors       Sector[]
+  tickets       Ticket[]
+}
+
+model Sector {
+  id                String    @id @default(uuid())
+  nameSector        String
+  fullPrice         Decimal
+  ticketsAvailable  Int
+  session           Session   @relation(fields: [sessionId], references: [id])
+  sessionId         String
+  tickets           Ticket[]
+}
+
+model Ticket {
+  id            String    @id @default(uuid())
+  type          String
+  pricePaid     Decimal
+  status        Boolean
+  purchasedIn   DateTime  @default(now())
+  user          User      @relation(fields: [userId], references: [id])
+  userId        String
+  event         Event     @relation(fields: [eventId], references: [id])
+  eventId       String
+  session       Session   @relation(fields: [sessionId], references: [id])
+  sessionId     String
+  sector        Sector    @relation(fields: [sectorId], references: [id])
+  sectorId      String
+}
