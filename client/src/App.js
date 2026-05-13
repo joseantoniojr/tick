@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import CreateEvent from "./pages/CreateEvent";
 import EditEvent from "./pages/EditEvent";
 import MyTickets from "./pages/MyTickets";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
 	return (
@@ -19,10 +20,38 @@ function App() {
 					<Route path='/login' element={<Login />} />
 					<Route path='/register' element={<Register />} />
 					<Route path='/events/:id' element={<EventDetail />} />
-					<Route path='/dashboard' element={<Dashboard />} />
-					<Route path='/events/create' element={<CreateEvent />} />
-					<Route path='/events/:id/edit' element={<EditEvent />} />
-					<Route path='/tickets' element={<MyTickets />} />
+					<Route
+						path='/dashboard'
+						element={
+							<PrivateRoute>
+								<Dashboard />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path='/events/create'
+						element={
+							<PrivateRoute>
+								<CreateEvent />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path='/events/:id/edit'
+						element={
+							<PrivateRoute>
+								<EditEvent />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path='/tickets'
+						element={
+							<PrivateRoute>
+								<MyTickets />
+							</PrivateRoute>
+						}
+					/>
 				</Routes>
 			</AuthProvider>
 		</BrowserRouter>
