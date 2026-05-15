@@ -29,7 +29,7 @@ model Event {
   indicativeRating  String
   category          String
   banner            String
-  author            User      @relation(fields: [authorId], references: [id])
+  author            User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId          String
   createdAt         DateTime  @default(now())
   sessions          Session[]
@@ -39,7 +39,7 @@ model Event {
 model Session {
   id            String    @id @default(uuid())
   scheduledAt   DateTime
-  event         Event     @relation(fields: [eventId], references: [id])
+  event         Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId       String
   sectors       Sector[]
   tickets       Ticket[]
@@ -50,7 +50,7 @@ model Sector {
   nameSector        String
   fullPrice         Decimal
   ticketsAvailable  Int
-  session           Session   @relation(fields: [sessionId], references: [id])
+  session           Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId         String
   tickets           Ticket[]
 }
@@ -61,12 +61,12 @@ model Ticket {
   pricePaid     Decimal
   status        Boolean
   purchasedIn   DateTime  @default(now())
-  user          User      @relation(fields: [userId], references: [id])
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String
-  event         Event     @relation(fields: [eventId], references: [id])
+  event         Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId       String
-  session       Session   @relation(fields: [sessionId], references: [id])
+  session       Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId     String
-  sector        Sector    @relation(fields: [sectorId], references: [id])
+  sector        Sector    @relation(fields: [sectorId], references: [id], onDelete: Cascade)
   sectorId      String
 }

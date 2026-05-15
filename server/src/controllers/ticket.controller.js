@@ -72,7 +72,7 @@ const buyTicket = async (req, res) => {
 const getMyTickets = async (req, res) => {
 	try {
 		const userId = req.userId;
-		const tickets = await prisma.ticket.findMany({ where: { userId }, include: { sector: true } });
+		const tickets = await prisma.ticket.findMany({ where: { userId }, include: { sector: true, event: true, session: true } });
 		return res.status(200).json(tickets);
 	} catch (error) {
 		return res.status(500).json({ message: "Error interno do servidor" });

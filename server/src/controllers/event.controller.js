@@ -33,6 +33,19 @@ const getEventById = async (req, res) => {
 	}
 };
 
+const getMyEvents = async (req, res) => {
+	try {
+		const userId = req.userId;
+
+		const events = await prisma.event.findMany({ where: { authorId: userId } });
+		if (!events) return res.status(404).json({ message: "Evento não encontrado" });
+
+		return res.status(200).json(events);
+	} catch (error) {
+		return res.status(500).json({ message: "Error interno do servidor" });
+	}
+};
+
 const createEvent = async (req, res) => {
 	try {
 		const { title, description, indicativeRating, category, banner } = req.body;
@@ -97,8 +110,9 @@ const deleteEvent = async (req, res) => {
 
 		return res.status(200).json({ message: "Evento deletado com sucesso" });
 	} catch (error) {
+		console.log(error)
 		return res.status(500).json({ message: "Error interno do servidor" });
 	}
 };
 
-module.exports = { getEvents, getEventById, createEvent, updateEvent, deleteEvent };
+module.exports = { getEvents, getEventById, getMyEvents, createEvent, updateEvent, deleteEvent };
