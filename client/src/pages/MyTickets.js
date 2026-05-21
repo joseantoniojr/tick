@@ -1,45 +1,144 @@
 import { useState, useEffect } from "react";
+import { Calendar, MapPin, Tag, CheckCircle, Clock, QrCode } from "lucide-react";
 import api from "../services/api";
 
 function MyTickets() {
 	const [tickets, setTickets] = useState([]);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		api.get("/tickets/my")
-			.then((response) => setTickets(response.data))
-			.catch((error) => console.log(error));
+			.then((response) => {
+				setTickets(response.data);
+				setLoading(false);
+			})
+			.catch((error) => {
+				console.log(error);
+				setLoading(false);
+			});
 	}, []);
 
-	return (
-		<div>
-			<h1>Meus Ingressos</h1>
-			<div>
-				{tickets.map((ticket) => (
-					<div key={ticket.id}>
-						<h2>{ticket.event.title}</h2>
-
-						<img src={ticket.event.banner} alt={ticket.event.title} width={200} />
-
-						<p>Categoria: {ticket.event.category}</p>
-
-						<p>Setor: {ticket.sector.nameSector}</p>
-
-						<p>Tipo: {ticket.type}</p>
-
-						<p>
-							Data:
-							{new Date(ticket.session.scheduledAt).toLocaleString("pt-BR")}
-						</p>
-
-						<p>Valor: R$ {ticket.pricePaid}</p>
-
-						<p>
-							Status:
-							{ticket.status ? "Usado" : "Ativo"}
-						</p>
-					</div>
-				))}
+	if (loading)
+		return (
+			<div className='flex items-center justify-center min-h-[60vh]'>
+				<div className='w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin' />
 			</div>
+		);
+
+	return (
+		<div className='max-w-3xl mx-auto'>
+			{/* Header */}
+			<div className='mb-8'>
+				<h1 className='text-3xl font-bold text-gray-900 dark:text-white'>Meus Ingressos</h1>
+				<p className='text-gray-500 dark:text-gray-400 text-sm mt-1'>
+					{tickets.length} ingresso{tickets.length !== 1 ? "s" : ""}
+				</p>
+			</div>
+
+			{/* Lista vazia */}
+			{tickets.length === 0 ? (
+				<div className='text-center py-16 border border-dashed border-gray-200 dark:border-gray-800 rounded-2xl'>
+					<p className='text-4xl mb-4'>🎟️</p>
+					<p className='text-gray-500 dark:text-gray-400'>Você ainda não comprou nenhum ingresso</p>
+				</div>
+			) : (
+				<div className='space-y-4'>
+					{tickets.map((ticket) => (
+						<div
+							key={ticket.id}
+							className='bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden'
+						>
+							{/* Ticket layout */}
+							<div className='flex'>
+								{/* Banner lateral */}
+								<div className='w-32 bg-gray-100 dark:bg-gray-800 flex-shrink-0'>
+									{ticket.event?.banner ? (
+										<img
+											src={ticket.event.banner}
+											alt={ticket.event.title}
+											className='w-full h-full object-cover'
+										/>
+									) : (
+										<div className='w-full h-full flex items-center justify-center text-3xl'>
+											🎟️
+										</div>
+									)}
+								</div>
+
+								{/* Conteúdo */}
+								<div className='flex-1 p-5'>
+									<div className='flex items-start justify-between gap-4'>
+										<div>
+											<h2 className='font-bold text-gray-900 dark:text-white text-lg'>
+												{ticket.event?.title}
+											</h2>
+
+											<div className='space-y-1 mt-2'>
+												<div className='flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400'>
+													<Calendar size={14} />
+													<span>
+														{ticket.session?.scheduledAt
+															? new Date(ticket.session.scheduledAt).toLocaleString(
+																	"pt-BR",
+																)
+															: "Data não disponível"}
+													</span>
+												</div>
+												<div className='flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400'>
+													<MapPin size={14} />
+													<span>{ticket.sector?.nameSector}</span>
+												</div>
+												<div className='flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400'>
+													<Tag size={14} />
+													<span>{ticket.type === "full" ? "Inteira" : "Meia entrada"}</span>
+												</div>
+											</div>
+										</div>
+
+										{/* Status e preço */}
+										<div className='text-right flex-shrink-0'>
+											<p className='text-xl font-bold text-gray-900 dark:text-white'>
+												R$ {Number(ticket.pricePaid).toFixed(2)}
+											</p>
+											<span
+												className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full mt-2 ${
+													ticket.status
+														? "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"
+														: "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400"
+												}`}
+											>
+												{ticket.status ? (
+													<>
+														<CheckCircle size={12} /> Usado
+													</>
+												) : (
+													<>
+														<Clock size={12} /> Ativo
+													</>
+												)}
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							{/* Divisor pontilhado */}
+							<div className='border-t border-dashed border-gray-200 dark:border-gray-700 mx-4' />
+
+							{/* Footer do ticket */}
+							<div className='px-5 py-3 flex items-center justify-between'>
+								<p className='text-xs text-gray-400 font-mono'>
+									#{ticket.id.slice(0, 8).toUpperCase()}
+								</p>
+								<div className='flex items-center gap-1 text-xs text-gray-400'>
+									<QrCode size={14} />
+									<span>ID do ingresso</span>
+								</div>
+							</div>
+						</div>
+					))}
+				</div>
+			)}
 		</div>
 	);
 }

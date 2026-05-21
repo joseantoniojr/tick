@@ -40,7 +40,7 @@ const login = async (req, res) => {
 
 			if (!passwordCompared) return res.status(401).json({ message: "Senha incorreta!" });
 
-			const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+			const token = jwt.sign({ id: user.id, name: user.name }, process.env.JWT_SECRET, { expiresIn: "7d" });
 			return res.status(200).json({ token });
 		}
 	} catch (error) {
