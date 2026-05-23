@@ -29,6 +29,9 @@ model Event {
   indicativeRating  String
   category          String
   banner            String
+  city              String
+  state             String
+  venueName         String
   author            User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId          String
   createdAt         DateTime  @default(now())

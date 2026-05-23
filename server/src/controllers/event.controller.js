@@ -48,11 +48,11 @@ const getMyEvents = async (req, res) => {
 
 const createEvent = async (req, res) => {
 	try {
-		const { title, description, indicativeRating, category, banner } = req.body;
+		const { title, description, indicativeRating, category, banner, city, state, venueName } = req.body;
 
 		const userId = req.userId;
 
-		if (!title || !description || !indicativeRating || !category || !banner) {
+		if (!title || !description || !indicativeRating || !category || !banner || !city || !state || !venueName) {
 			return res.status(400).json({ message: "Campos obrigatórios" });
 		}
 
@@ -63,6 +63,9 @@ const createEvent = async (req, res) => {
 				indicativeRating,
 				category,
 				banner,
+				city,
+				state,
+				venueName,
 				authorId: userId,
 			},
 		});
@@ -76,7 +79,7 @@ const createEvent = async (req, res) => {
 const updateEvent = async (req, res) => {
 	try {
 		const { id } = req.params;
-		const { title, description, indicativeRating, category, banner } = req.body;
+		const { title, description, indicativeRating, category, banner, city, state, venueName } = req.body;
 
 		const userId = req.userId;
 
@@ -87,7 +90,7 @@ const updateEvent = async (req, res) => {
 
 		const updatedEvent = await prisma.event.update({
 			where: { id },
-			data: { title, description, indicativeRating, category, banner },
+			data: { title, description, indicativeRating, category, banner, city, state, venueName },
 		});
 
 		return res.status(200).json(updatedEvent);

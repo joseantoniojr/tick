@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Calendar, Tag, Shield, ShoppingCart, ChevronDown } from "lucide-react";
+import { Calendar, Tag, Shield, ShoppingCart, MapPin } from "lucide-react";
 import { AuthContext } from "../contexts/AuthContext";
 import api from "../services/api";
 
@@ -93,6 +93,13 @@ function EventDetail() {
 						<span className='flex items-center gap-1 text-xs font-medium px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'>
 							<Shield size={12} />
 							{event.indicativeRating}+
+						</span>
+					</div>
+
+					<div className='flex items-center gap-2 text-gray-500 dark:text-gray-400'>
+						<MapPin size={16} className='text-primary-500' />
+						<span className='font-medium'>
+							{event.city} - {event.state} — {event.venueName}
 						</span>
 					</div>
 

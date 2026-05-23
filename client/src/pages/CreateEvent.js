@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, Image, Tag, Shield, AlignLeft, Type } from "lucide-react";
+import { ArrowLeft, Image, Tag, Shield, AlignLeft, Type, MapPin, Building } from "lucide-react";
 import api from "../services/api";
 
 function CreateEvent() {
@@ -9,6 +9,9 @@ function CreateEvent() {
 	const [indicativeRating, setIndicativeRating] = useState("");
 	const [category, setCategory] = useState("");
 	const [banner, setBanner] = useState("");
+	const [city, setCity] = useState("");
+	const [state, setState] = useState("");
+	const [venueName, setVenueName] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
@@ -18,7 +21,16 @@ function CreateEvent() {
 		setLoading(true);
 		setError("");
 		try {
-			await api.post("/events", { title, description, indicativeRating, category, banner });
+			await api.post("/events", {
+				title,
+				description,
+				indicativeRating,
+				category,
+				banner,
+				city,
+				state,
+				venueName,
+			});
 			navigate("/dashboard");
 		} catch (error) {
 			setError("Erro ao criar evento. Verifique os campos.");
@@ -97,6 +109,45 @@ function CreateEvent() {
 								onChange={(e) => setDescription(e.target.value)}
 								rows={4}
 								className='w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all resize-none'
+							/>
+						</div>
+					</div>
+
+					{/* Localização */}
+					<div>
+						<label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
+							Localização
+						</label>
+						<div className='grid grid-cols-2 gap-3 mb-3'>
+							<div className='relative'>
+								<MapPin size={18} className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400' />
+								<input
+									type='text'
+									placeholder='Cidade'
+									value={city}
+									onChange={(e) => setCity(e.target.value)}
+									className='w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all'
+								/>
+							</div>
+							<div className='relative'>
+								<input
+									type='text'
+									placeholder='Estado (ex: SP)'
+									value={state}
+									onChange={(e) => setState(e.target.value.toUpperCase())}
+									maxLength={2}
+									className='w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all'
+								/>
+							</div>
+						</div>
+						<div className='relative'>
+							<Building size={18} className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400' />
+							<input
+								type='text'
+								placeholder='Nome do local (ex: Allianz Parque)'
+								value={venueName}
+								onChange={(e) => setVenueName(e.target.value)}
+								className='w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all'
 							/>
 						</div>
 					</div>

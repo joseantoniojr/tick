@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Pencil, Trash2, Calendar, Tag, Settings } from "lucide-react";
+import { Plus, Pencil, Trash2, Calendar, Tag, Settings, MapPin } from "lucide-react";
 import api from "../services/api";
 
 function Dashboard() {
@@ -98,6 +98,10 @@ function Dashboard() {
 									<span className='flex items-center gap-1 text-xs text-gray-400'>
 										<Calendar size={12} />
 										{event.sessions?.length || 0} sessões
+									</span>
+									<span className='flex items-center gap-1 text-xs text-gray-400'>
+										<MapPin size={12} />
+										{event.city} - {event.state}
 									</span>
 								</div>
 							</div>

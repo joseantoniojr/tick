@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
-import { Calendar, Tag, ArrowRight } from "lucide-react";
+import { Calendar, MapPin } from "lucide-react";
 
 function Home() {
 	const [events, setEvents] = useState([]);
@@ -45,52 +45,69 @@ function Home() {
 					<p className='text-gray-500 dark:text-gray-400'>Nenhum evento disponível no momento.</p>
 				</div>
 			) : (
-				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
 					{events.map((event) => (
 						<Link
 							key={event.id}
 							to={`/events/${event.id}`}
-							className='group rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-primary-500 dark:hover:border-primary-500 transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/10'
+							className='group relative rounded-2xl overflow-hidden aspect-[3/4] bg-gray-100 dark:bg-gray-800 hover:scale-[1.02] transition-all duration-300'
 						>
-							{/* Banner */}
-							<div className='aspect-video overflow-hidden bg-gray-100 dark:bg-gray-800'>
-								{event.banner ? (
-									<img
-										src={event.banner}
-										alt={event.title}
-										className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-300'
-									/>
-								) : (
-									<div className='w-full h-full flex items-center justify-center'>
-										<span className='text-4xl'>🎟️</span>
-									</div>
-								)}
+							{/* Imagem de fundo */}
+							{event.banner ? (
+								<img
+									src={event.banner}
+									alt={event.title}
+									className='absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500'
+								/>
+							) : (
+								<div className='absolute inset-0 flex items-center justify-center text-5xl'>🎟️</div>
+							)}
+
+							{/* Gradiente */}
+							<div className='absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent' />
+
+							{/* Badge categoria */}
+							<div className='absolute top-3 left-3'>
+								<span className='text-xs font-semibold px-3 py-1 rounded-full bg-primary-600/90 backdrop-blur-sm text-white'>
+									{event.category}
+								</span>
 							</div>
 
-							{/* Conteúdo */}
-							<div className='p-5'>
-								<div className='flex items-center gap-2 mb-3'>
-									<span className='text-xs font-medium px-2 py-1 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400'>
-										{event.category}
-									</span>
-									<span className='text-xs text-gray-400'>{event.indicativeRating}+</span>
-								</div>
+							{/* Conteúdo inferior */}
+							<div className='absolute bottom-0 left-0 right-0 p-4'>
+								{/* Data */}
+								{event.sessions?.[0] && (
+									<div className='flex items-center gap-1.5 mb-2'>
+										<Calendar size={13} className='text-primary-400' />
+										<span className='text-xs font-medium text-primary-400'>
+											{new Date(event.sessions[0].scheduledAt).toLocaleDateString("pt-BR", {
+												day: "2-digit",
+												month: "long",
+											})}
+										</span>
+									</div>
+								)}
 
-								<h2 className='text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors'>
+								{/* Título */}
+								<h2 className='text-white font-bold text-base leading-tight mb-1 group-hover:text-primary-300 transition-colors line-clamp-2'>
 									{event.title}
 								</h2>
 
-								<p className='text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-4'>
-									{event.description}
-								</p>
+								{/* Localização */}
+								<div className='flex items-center gap-1 mt-1'>
+									<MapPin size={12} className='text-gray-400 flex-shrink-0' />
+									<span className='text-xs text-gray-300 truncate'>
+										{event.city} - {event.state} — {event.venueName}
+									</span>
+								</div>
 
-								<div className='flex items-center justify-between'>
-									<div className='flex items-center gap-1 text-xs text-gray-400'>
-										<Calendar size={14} />
-										<span>{event.sessions?.length || 0} {event.sessions.length === 1 ? "sessão" : "sessões"}</span>
-									</div>
-									<span className='text-primary-600 dark:text-primary-400 flex items-center gap-1 text-sm font-medium'>
-										Ver mais <ArrowRight size={14} />
+								{/* Classificação */}
+								<div className='flex items-center justify-between mt-3 pt-3 border-t border-white/10'>
+									<span className='text-xs text-gray-400'>
+										{event.sessions?.length || 0} sessão{event.sessions?.length !== 1 ? "ões" : ""}
+									</span>
+									<span className='text-xs font-medium px-2 py-0.5 rounded-full bg-white/10 text-gray-300'>
+										{event.indicativeRating === "Livre" ? "Livre" : `${event.indicativeRating}+`}
 									</span>
 								</div>
 							</div>

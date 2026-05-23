@@ -10,6 +10,9 @@ function EditEvent() {
 	const [indicativeRating, setIndicativeRating] = useState("");
 	const [category, setCategory] = useState("");
 	const [banner, setBanner] = useState("");
+	const [city, setCity] = useState("");
+	const [state, setState] = useState("");
+	const [venueName, setVenueName] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [fetching, setFetching] = useState(true);
 	const [error, setError] = useState("");
@@ -24,6 +27,9 @@ function EditEvent() {
 				setIndicativeRating(event.indicativeRating);
 				setCategory(event.category);
 				setBanner(event.banner);
+				setCity(event.city);
+				setState(event.state);
+				setVenueName(event.venueName);
 				setFetching(false);
 			})
 			.catch((error) => {
@@ -37,7 +43,7 @@ function EditEvent() {
 		setLoading(true);
 		setError("");
 		try {
-			await api.put(`/events/${id}`, { title, description, indicativeRating, category, banner });
+			await api.put(`/events/${id}`, { title, description, indicativeRating, category, banner, city, state, venueName });
 			navigate("/dashboard");
 		} catch (error) {
 			setError("Erro ao editar evento.");
