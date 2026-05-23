@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Plus, Trash2, Calendar, Users, DollarSign } from "lucide-react";
 import api from "../services/api";
@@ -15,7 +15,7 @@ function ManageEvent() {
 	const [selectedSessionId, setSelectedSessionId] = useState(null);
 	const [creatingSector, setCreatingSector] = useState(false);
 
-	const fetchEvent = () => {
+	const fetchEvent = useCallback(() => {
 		api.get(`/events/${id}`)
 			.then((response) => {
 				setEvent(response.data);
@@ -25,11 +25,11 @@ function ManageEvent() {
 				console.log(error);
 				setLoading(false);
 			});
-	};
+	}, [id]);
 
 	useEffect(() => {
 		fetchEvent();
-	}, [id]);
+	}, [fetchEvent]);
 
 	// Criar sessão
 	const handleCreateSession = async (e) => {
