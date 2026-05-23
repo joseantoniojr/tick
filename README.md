@@ -2,7 +2,13 @@
 
 Bilheteria digital full-stack desenvolvida com Node.js, React e PostgreSQL.
 
-![tick. preview](https://seu-link-de-preview.com)
+## 📸 Screenshots
+
+![Home](./screenshots/home.png)
+![Evento](./screenshots/event-detail.png)
+![Dashboard](./screenshots/dashboard.png)
+![Ingressos](./screenshots/tickets.png)
+![Login](./screenshots/login.png)
 
 ## 🚀 Tecnologias
 

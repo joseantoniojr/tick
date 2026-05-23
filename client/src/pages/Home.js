@@ -104,7 +104,7 @@ function Home() {
 								{/* Classificação */}
 								<div className='flex items-center justify-between mt-3 pt-3 border-t border-white/10'>
 									<span className='text-xs text-gray-400'>
-										{event.sessions?.length || 0} sessão{event.sessions?.length !== 1 ? "ões" : ""}
+										{event.sessions?.length || 0} {event.sessions?.length <= 1 ? "sessão" : "sessões"}
 									</span>
 									<span className='text-xs font-medium px-2 py-0.5 rounded-full bg-white/10 text-gray-300'>
 										{event.indicativeRating === "Livre" ? "Livre" : `${event.indicativeRating}+`}
