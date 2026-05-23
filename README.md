@@ -55,20 +55,24 @@ Bilheteria digital full-stack desenvolvida com Node.js, React e PostgreSQL.
 
 ## 🗂️ Estrutura do projeto
 
+```txt
 tick/
-├── server/ → API REST (Node.js + Express)
-│ ├── src/
-│ │ ├── config/
-│ │ ├── controllers/
-│ │ ├── middlewares/
-│ │ └── routes/
-│ └── prisma/
-└── client/ → Interface (React)
-└── src/
-├── components/
-├── contexts/
-├── pages/
-└── services/
+│
+├── server/                         # API REST (Node.js + Express)
+│   ├── prisma/
+│   └── src/
+│       ├── config/
+│       ├── controllers/
+│       ├── middlewares/
+│       └── routes/
+│
+└── client/                         # Frontend React
+    └── src/
+        ├── components/
+        ├── contexts/
+        ├── pages/
+        └── services/
+```
 
 ## ⚙️ Como rodar localmente
 
